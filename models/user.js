@@ -51,6 +51,12 @@ userSchema.virtual('appartment', {
     foreignField: 'addedBy'
 })
 
+userSchema.virtual('bookings', {
+    ref: 'Booking',
+    localField: '_id',
+    foreignField: 'createdBy'
+})
+
 userSchema.methods.toJSON = function () {
     const user = this
     const userObject = user.toObject()

@@ -39,7 +39,7 @@ router.post('/appartments/:id/thumbnail', adminAuth, upload.single('thumbnail'),
     res.status(400).send({ error: error.message })
 })
 
-router.patch('/appartment/:id', adminAuth, async (req, res) => {
+router.patch('/appartments/:id', adminAuth, async (req, res) => {
     const updates = Object.keys(req.body)
     const appartment = await Appartment.findById(req.params.id);
     const allowedUpdates = ['title', 'price', 'numberOfBathRooms', 'numberOfBedRooms', 'location']
@@ -58,11 +58,11 @@ router.patch('/appartment/:id', adminAuth, async (req, res) => {
     }
 })
 
-router.delete('/appartment/:id', adminAuth, async (req, res) => {
+router.delete('/appartments/:id', adminAuth, async (req, res) => {
     const appartment = await Appartment.findById(req.params.id);
     try {
         await appartment.remove()
-        res.send(req.user)
+        res.send(appartment)
     } catch (e) {
         res.status(500).send()
     }

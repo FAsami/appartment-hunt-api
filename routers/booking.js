@@ -3,6 +3,8 @@ const Booking = require('../models/booking');
 const router = new express.Router()
 const auth = require('../middlewares/auth');
 const adminAuth = require('../middlewares/adminAuth');
+const mongoose = require('mongoose');
+const User = require('../models/user');
 
 router.post('/bookings', auth, async (req, res) => {
     const booking = new Booking({ ...req.body, createdBy: req.user._id });
@@ -43,10 +45,12 @@ router.get('/allBookings', adminAuth, async (req, res) => {
 });
 
 router.get('/bookings', auth, async (req, res) => {
+    const user = await User.findById(req.user._id)
+    await user.populate('bookings').execPopulate();
     try {
-        const bookings = await Booking.findB({ addedBy: req.user._id })
-        res.send(bookings);
+        res.send(user.bookings)
     } catch (error) {
+        console.log(error)
         res.status(400).send();
     }
 })
